@@ -1,6 +1,7 @@
 package com.example.hellospring.repository;
 
 import com.example.hellospring.domain.Member;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,9 +10,16 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class MemoryMemberRepositoryTest {
-    // 테스트는 순서대로 진행되지 않음
+    // 테스트는 순서대로 진행되지 않으므로, 테스트 끝나면 clear 해주어야 함
+    // 따라서 서로 의존 관계가 없도록 설계되어야 함
 
     MemoryMemberRepository repository = new MemoryMemberRepository();
+
+    // 테스트 끝날때마다 실행되는 코드
+    @AfterEach
+    public void afterEach() {
+        repository.clearStore();
+    }
 
     @Test
     public void save() {
