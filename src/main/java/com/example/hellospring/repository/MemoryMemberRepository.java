@@ -17,6 +17,11 @@ public class MemoryMemberRepository implements MemberRepository{
     }
 
     @Override
+    public Long login(Member member) {
+        return null;
+    }
+
+    @Override
     public Optional<Member> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }

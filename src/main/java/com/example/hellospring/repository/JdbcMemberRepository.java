@@ -46,6 +46,12 @@ public class JdbcMemberRepository implements MemberRepository {
             close(conn, pstmt, rs);
         }
     }
+
+    @Override
+    public Long login(Member member) {
+        return null;
+    }
+
     @Override
     public Optional<Member> findById(Long id) {
         String sql = "select * from member where id = ?";

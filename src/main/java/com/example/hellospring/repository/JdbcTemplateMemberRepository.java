@@ -2,6 +2,7 @@ package com.example.hellospring.repository;
 
 import com.example.hellospring.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -34,6 +35,18 @@ public class JdbcTemplateMemberRepository implements MemberRepository{
                 MapSqlParameterSource(parameters));
         member.setId(key.longValue());
         return member;
+    }
+
+    @Override
+    public Long login(Member member) {
+        try {
+            String sql = "select id from member where name = ?";
+            Object[] params = new Object[]{member.getName()};
+            Long userId = jdbcTemplate.queryForObject(sql, params, Long.class);
+            return userId;
+        } catch (EmptyResultDataAccessException e) {
+            return Long.parseLong("-1");
+        }
     }
 
     @Override
