@@ -36,7 +36,8 @@ public class MemberController {
     @ResponseBody
     public String create(@RequestBody MemberForm form) {
         Member member = new Member();
-        member.setName(form.getName());
+        member.setEmail(form.getEmail());
+        member.setPasswd(form.getPasswd());
 
         memberService.join(member);
 
@@ -47,7 +48,8 @@ public class MemberController {
     @ResponseBody
     public Object login(@RequestBody MemberForm form) {
         Member member = new Member();
-        member.setName(form.getName());
+        member.setEmail(form.getEmail());
+        member.setPasswd(form.getPasswd());
 
         Long userId = memberService.login(member);
         String token = jwtTokenProvider.makeJwtToken(userId);

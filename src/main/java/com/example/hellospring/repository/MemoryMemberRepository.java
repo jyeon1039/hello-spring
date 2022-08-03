@@ -17,19 +17,14 @@ public class MemoryMemberRepository implements MemberRepository{
     }
 
     @Override
-    public Long login(Member member) {
-        return null;
-    }
-
-    @Override
     public Optional<Member> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
 
     @Override
-    public Optional<Member> findByName(String name) {
+    public Optional<Member> findByEmail(String email) {
         return store.values().stream()
-                .filter(member -> member.getName().equals(name))
+                .filter(member -> member.getEmail().equals(email))
                 .findAny();
     }
 

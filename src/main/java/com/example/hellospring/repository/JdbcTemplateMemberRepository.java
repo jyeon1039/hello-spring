@@ -30,23 +30,12 @@ public class JdbcTemplateMemberRepository implements MemberRepository{
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("member").usingGeneratedKeyColumns("id");
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("name", member.getName());
+        parameters.put("email", member.getEmail());
+        parameters.put("passwd", member.getPasswd());
         Number key = jdbcInsert.executeAndReturnKey(new
                 MapSqlParameterSource(parameters));
         member.setId(key.longValue());
         return member;
-    }
-
-    @Override
-    public Long login(Member member) {
-        try {
-            String sql = "select id from member where name = ?";
-            Object[] params = new Object[]{member.getName()};
-            Long userId = jdbcTemplate.queryForObject(sql, params, Long.class);
-            return userId;
-        } catch (EmptyResultDataAccessException e) {
-            return Long.parseLong("-1");
-        }
     }
 
     @Override
@@ -56,8 +45,8 @@ public class JdbcTemplateMemberRepository implements MemberRepository{
     }
 
     @Override
-    public Optional<Member> findByName(String name) {
-        List<Member> result = jdbcTemplate.query("select * from member where name = ?", memberRowMapper(), name);
+    public Optional<Member> findByEmail(String email) {
+        List<Member> result = jdbcTemplate.query("select * from member where email = ?", memberPasswdRowMapper(), email);
         return result.stream().findAny();
     }
 
@@ -70,7 +59,16 @@ public class JdbcTemplateMemberRepository implements MemberRepository{
         return (rs, rowNum) -> {
             Member member = new Member();
             member.setId(rs.getLong("id"));
-            member.setName(rs.getString("name"));
+            member.setEmail(rs.getString("email"));
+            return member;
+        };
+    }
+
+    private RowMapper<Member> memberPasswdRowMapper() {
+        return (rs, rowNum) -> {
+            Member member = new Member();
+            member.setId(rs.getLong("id"));
+            member.setPasswd(rs.getString("passwd"));
             return member;
         };
     }

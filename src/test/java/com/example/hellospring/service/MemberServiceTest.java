@@ -1,24 +1,23 @@
 package com.example.hellospring.service;
 
 import com.example.hellospring.domain.Member;
-import com.example.hellospring.repository.MemberRepository;
 import com.example.hellospring.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MemberServiceTest {
+    @Autowired
     MemberService memberService;
     MemoryMemberRepository memberRepository;
 
     @BeforeEach
     public void beforeEach() {
         memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
     }
 
     @AfterEach
@@ -30,24 +29,24 @@ class MemberServiceTest {
     void join() {
         //given
         Member member = new Member();
-        member.setName("spring");
+        member.setEmail("spring@spring.com");
 
         //when
         Long saveId = memberService.join(member);
 
         //then
         Member findMember = memberService.findOne(saveId).get();
-        assertThat(member.getName()).isEqualTo(findMember.getName());
+        assertThat(member.getEmail()).isEqualTo(findMember.getEmail());
     }
 
     @Test
     public void duplicate_join() {
         //given
         Member member1 = new Member();
-        member1.setName("spring");
+        member1.setEmail("spring@spring.com");
 
         Member member2 = new Member();
-        member2.setName("spring");
+        member2.setEmail("spring@spring.com");
 
         //when
         memberService.join(member1);
